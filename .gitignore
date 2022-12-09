@@ -130,3 +130,5 @@ dmypy.json
 
 # CUSTOM 
 secret_keys.py
+
+media/
