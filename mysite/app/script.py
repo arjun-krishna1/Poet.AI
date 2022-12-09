@@ -38,8 +38,11 @@ transcript_id = response_json.get("id")
 print(f"POSTED TRANSCRIPT REQUEST {transcript_id}")
 
 MAX_ATTEMPTS=10
-# assume videos are 2minutes, transcript takes 25% of video length, 5 seconds of buffer
-ORIG_WAIT=35
+
+WAIT_ORIG=0.5*60
+WAIT_STEP=0.25*60
+
+sleep(WAIT_ORIG)
 
 COMPLETE_MSG="completed"
 # TODO handle error
@@ -49,20 +52,28 @@ headers = {
 }
 
 print("ABOUT TO START TRYING TO GET RESULT")
+success = False
 for i in range(MAX_ATTEMPTS):
-  sleep(ORIG_WAIT)
   response_new = requests.get(endpoint, headers=headers)
-  response_new_json = response.json()
+  response_new_json = response_new.json()
   status = response_new_json.get("status")
   print(f"TRY {i} OF API CALL, STATUS {status}")
   print()
   if response_new_json.get("status") == COMPLETE_MSG:
     print("completed")
+    success = True
     response_fin = response_new_json
+    break
+  else:
+    sleep(WAIT_STEP)
 
-print(response_fin)
-transcript = response_fin.get("text")
-SPLIT_REGEX = ";|\."
-main_phrases = re.split(SPLIT_REGEX, transcript)
-main_phrases_processed = list(filter(None, main_phrases))
-print(main_phrases_processed)
+if success:
+  print(response_fin)
+  transcript = response_fin.get("text")
+  SPLIT_REGEX = ";|\."
+  main_phrases = re.split(SPLIT_REGEX, transcript)
+  main_phrases_processed = list(filter(None, main_phrases))
+  print(main_phrases_processed)
+else:
+  print("FAILED, LAST RESPONSE")
+  print(response_new_json)
