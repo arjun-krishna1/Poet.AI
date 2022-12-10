@@ -132,3 +132,7 @@ dmypy.json
 secret_keys.py
 
 media/
+*.mp4
+mysite/app/*.mp4
+*.mp3
+mysite/app/*.mp3

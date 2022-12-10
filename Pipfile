@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 django = "*"
 assemblyai = "*"
+replicate = "*"
+moviepy = "*"
+pillow = "*"
+numpy = "*"
 
 [dev-packages]
 
