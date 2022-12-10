@@ -1,4 +1,4 @@
-from .secret_keys import ASSEMBLY_AI_KEY
+from secret_keys import ASSEMBLY_AI_KEY
 
 import requests
 

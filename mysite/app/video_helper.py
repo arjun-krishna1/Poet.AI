@@ -1,4 +1,4 @@
-from .secret_keys import REPLICATE_KEY
+from secret_keys import REPLICATE_KEY
 
 import replicate
 
