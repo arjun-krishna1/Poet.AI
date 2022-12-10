@@ -6,12 +6,13 @@ from django.core.files.storage import FileSystemStorage
 from .transcript import (
   upload_audio,
   start_generation_transcript, get_completed_transcript,
-  get_phrase_timestamps,
   get_durations,
 )
 from .video_helper import turn_prompts_to_images, create_video
 from .gpt3_handler import (
-  get_gpt3_phrases, get_gpt3_phrase_timestamps, get_gpt3_stable_diffusion_prompt
+  get_gpt3_phrases,
+  get_gpt3_phrase_timestamps,
+  get_gpt3_stable_diffusion_prompt
 )
 
 VIDEO_EXT = ".webserver.mp4"
@@ -31,7 +32,11 @@ def index(request):
     t_id = start_generation_transcript(t_url)
     text, words = get_completed_transcript(t_id)
 
+    print("GENERATED TRANSCRIPT")
+
     phrases = get_gpt3_phrases(text)
+
+    print("GENERATED PHRASES")
 
     timestamps = get_gpt3_phrase_timestamps(phrases, words)
 
@@ -39,13 +44,15 @@ def index(request):
 
     prompts = [get_gpt3_stable_diffusion_prompt(p) for p in phrases]
 
+    print("GENERATED PROMPTS")
     # START GENERATING VIDEO
     imgs = turn_prompts_to_images(prompts)
     video_filename = absolute_file_path + VIDEO_EXT
     
     # SAVE VIDEO AND SHOW TO USER
     create_video(imgs, durations, absolute_file_path, video_filename)
-    video_url = "https://www.youtube.com/watch?v=W0_UVufRkhs"
+    video_url = uploaded_file_url + VIDEO_EXT
+    print(video_url)
 
     return render(request, "app/index.html", {
       "video_url": video_url,

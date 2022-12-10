@@ -1,9 +1,8 @@
 import openai
 
-from secret_keys import GPT_KEY
+from .secret_keys import GPT_KEY
 
 openai.api_key = GPT_KEY
-
 
 
 def get_gpt3_phrases(text):
