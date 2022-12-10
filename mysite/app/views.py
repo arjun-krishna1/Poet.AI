@@ -3,15 +3,20 @@ from django.shortcuts import render
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
+from .transcript import upload_audio, start_generation_transcript, get_completed_transcript
+
 def index(request):
   if request.method == "POST" and request.FILES["myfile"]:
     myfile = request.FILES["myfile"]
     fs = FileSystemStorage()
     filename = fs.save(myfile.name, myfile)
     uploaded_file_url = fs.url(filename)
+    absolute_file_path = fs.path(filename)
+    print(get_completed_transcript(start_generation_transcript(upload_audio(absolute_file_path))))
     return render(request, "app/index.html", {
       "uploaded_file_url": uploaded_file_url
     })
+
   return render(request, "app/index.html")
 
 def visualizeTranscript(request):
