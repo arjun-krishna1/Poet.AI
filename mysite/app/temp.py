@@ -1,5 +1,5 @@
 import re
-from text_processing import get_phrase_timestamps
+from transcript import get_phrase_timestamps, spread_timestamps
 
 resp_data = {
   "text": "Two roads diverged in a yellow wood and sorry I could not travel both and be one traveler long. I stood and looked down as far as I could to where it bent in the undergrowth, then took the other. As just as fair and having perhaps the better claim because it was grassy and wanted wear the last for that the passing there had warned them really about the same. And both that morning equally lay and leaves. No step had trodden black. Oh, I kept the first for another day yet knowing how way leads on to way, I doubt it. If I should ever come back, I shall be telling this with a sigh. Somewhere ages and ages hence two roads diverge in a wood and I I took the one less traveled by and that has made all the difference.",
@@ -2034,4 +2034,4 @@ resp_data = {
 	],
 }
 
-print(get_phrase_timestamps(resp_data.get("words")))
+print(spread_timestamps(get_phrase_timestamps(resp_data.get("words"))))

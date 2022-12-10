@@ -8,8 +8,10 @@
   <input type="submit" value="Submit">
 </form>
 
-{% if uploaded_file_url %}
-  <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+{% if video_url %}
+<video width="320" height="240" controls>
+  <source src="{{ video_url }}" type="video/mp4">
+</video>
 {% else  %}
-  <p>Uploaded file url will be here</p>
+  <p>Result will appear here. Takes about 3x the length of the video.</p>
 {% endif %}
