@@ -1,4 +1,4 @@
-from .secret_keys import ASSEMBLY_AI_KEY
+from secret_keys import ASSEMBLY_AI_KEY
 
 import requests
 import re
@@ -50,11 +50,11 @@ def start_generation_transcript(upload_url: str) -> str:
   transcript_id = response_json.get("id")
   return transcript_id
 
-def get_completed_transcript(transcript_id: str) -> str:
+def get_completed_transcript(transcript_id: str) -> tuple[str, list[dict]]:
   """
   Takes the transcript id of an Assembly AI transcription job
   Loops til transcription is over
-  Processes result and returns list of phrases in audio
+  Processes result and returns list of words and text
   """
   MAX_ATTEMPTS=10
   WAIT_STEP=0.1*60
@@ -80,10 +80,27 @@ def get_completed_transcript(transcript_id: str) -> str:
       sleep(WAIT_STEP)
 
   if success:
-    transcript = response_fin.get("text")
-    SPLIT_REGEX = ";|\."
-    main_phrases = re.split(SPLIT_REGEX, transcript)
-    main_phrases_processed = list(filter(None, main_phrases))
-    return main_phrases_processed
+    return (response_fin.get("text"), response_fin.get("words"))
   else:
-    return []
+    return ("", [])
+
+def get_phrase_timestamps(words):
+  res = {}
+  start = words[0].get("start")
+  new = False
+  this_phrase = ""
+  for i in range(len(words)):
+    if new:
+      start = words[i].get("start")
+      new = False
+
+    if words[i].get("text").isalpha():
+      this_phrase += words[i].get("text") + " "
+    else:
+      this_phrase += words[i].get("text")
+      end = words[i].get("end")
+      this_key = (start, end)
+      res[this_key] = this_phrase
+      this_phrase = ""
+      new = True
+  return res
