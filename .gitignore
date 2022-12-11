@@ -136,3 +136,5 @@ media/
 mysite/app/*.mp4
 *.mp3
 mysite/app/*.mp3
+
+mysite/static/admin

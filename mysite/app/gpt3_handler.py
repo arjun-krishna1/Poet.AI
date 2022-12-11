@@ -52,7 +52,7 @@ def get_gpt3_phrase_timestamps(phrases, words):
         break
       else:
         word_loc += 1
-    
+
   last_stamp = (
     words[word_start_idx].get("start"),
     words[-1].get("end")
